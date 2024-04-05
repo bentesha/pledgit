@@ -5,7 +5,7 @@ export class CreateContactValidator extends ValidatorPipe {
   constructor() {
     super(
       Joi.object({
-        reference: Joi.string().valid(null).label('Reference'),
+        reference: Joi.string().allow(null).label('Reference'),
         firstName: Joi.string().required().label('First name'),
         lastName: Joi.string().required().label('Last name'),
         phone: Joi.string().required().label('Phone'),
