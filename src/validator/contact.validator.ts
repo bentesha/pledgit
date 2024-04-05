@@ -18,7 +18,7 @@ export class UpdateContactValidator extends ValidatorPipe {
   constructor() {
     super(
       Joi.object({
-        reference: Joi.string().valid(null).label('Reference'),
+        reference: Joi.string().allow(null).label('Reference'),
         firstName: Joi.string().label('First name'),
         lastName: Joi.string().label('Last name'),
         phone: Joi.string().label('Phone'),
