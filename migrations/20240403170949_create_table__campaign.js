@@ -6,6 +6,8 @@ exports.up = function (knex) {
   return knex.schema.createTable('campaign', (table) => {
     table.string('id').primary();
     table.string('name').notNullable().unique();
+    table.date('startDate');
+    table.date('endDate');
     table.text('description');
     table.dateTime('createdAt').notNullable().defaultTo(knex.fn.now());
     table.dateTime('updatedAt').notNullable().defaultTo(knex.fn.now());
