@@ -346,3 +346,251 @@ Retrieves a list of all campaigns.
 #### Notes
 - This endpoint returns an array of campaign objects.
 - It lists all campaigns stored in the system.
+
+### Create Pledge
+Creates a new pledge.
+
+#### Request
+- **Method:** POST
+- **Endpoint:** `/pledge`
+- **Headers:** 
+  - Content-Type: application/json
+- **Body:**
+  ```json
+  {
+    "contactId": "dM9PPRY0lW3c",
+    "campaignId": "a3rDge3wLSTh",
+    "amount": 120000,
+    "notes": null
+  }
+  ```
+  - `contactId`: The ID of the contact associated with the pledge.
+  - `campaignId`: The ID of the campaign associated with the pledge.
+  - `amount`: The amount of the pledge.
+  - `notes`: Additional notes or comments for the pledge.
+
+#### Response
+- **Status Code:** 200 OK
+- **Body:**
+  ```json
+  {
+    "id": "CArMUpzZjbeW",
+    "number": "1712509433074",
+    "contactId": "dM9PPRY0lW3c",
+    "campaignId": "a3rDge3wLSTh",
+    "amount": 120000,
+    "notes": null,
+    "createdAt": "2024-04-07T17:03:53.000Z",
+    "updatedAt": "2024-04-07T17:03:53.000Z",
+    "contact": {
+      "id": "dM9PPRY0lW3c",
+      "reference": "400",
+      "firstName": "Miriam",
+      "lastName": "Ringo",
+      "phone": "255789876687",
+      "createdAt": "2024-04-07T17:03:44.000Z",
+      "updatedAt": "2024-04-07T17:03:44.000Z"
+    },
+    "campaign": {
+      "id": "a3rDge3wLSTh",
+      "name": "Ujenzi wa Kanisa - Mbwiji",
+      "startDate": "2023-12-08T21:00:00.000Z",
+      "endDate": "2024-12-07T21:00:00.000Z",
+      "description": "Ujenzi wa kanisa Mbwiji Mtoni",
+      "createdAt": "2024-04-06T12:52:04.000Z",
+      "updatedAt": "2024-04-06T12:54:54.000Z"
+    }
+  }
+  ```
+  - `id`: Unique identifier for the created pledge.
+  - `number`: Unique identifier for the pledge (e.g., invoice number).
+  - `contactId`: The ID of the contact associated with the pledge.
+  - `campaignId`: The ID of the campaign associated with the pledge.
+  - `amount`: The amount of the pledge.
+  - `notes`: Additional notes or comments for the pledge.
+  - `createdAt`: Timestamp indicating when the pledge was created.
+  - `updatedAt`: Timestamp indicating when the pledge was last updated.
+  - `contact`: Details of the associated contact.
+  - `campaign`: Details of the associated campaign.
+
+#### Notes
+- The `notes` field is nullable.
+
+### Update Pledge
+Updates an existing pledge with the specified ID.
+
+#### Request
+- **Method:** PATCH
+- **Endpoint:** `/pledge/:id` (where `:id` is the unique identifier of the pledge)
+- **Headers:** 
+  - Content-Type: application/json
+- **Body:**
+  ```json
+  {
+    "amount": 145000,
+    "notes": "Some comments"
+  }
+  ```
+  - `amount`: Updated amount of the pledge.
+  - `notes`: Updated additional notes or comments for the pledge. Nullable.
+
+#### Response
+- **Status Code:** 200 OK
+- **Body:**
+  ```json
+  {
+    "id": "CArMUpzZjbeW",
+    "number": "1712509433074",
+    "contactId": "dM9PPRY0lW3c",
+    "campaignId": "a3rDge3wLSTh",
+    "amount": 145000,
+    "notes": "Some comments",
+    "createdAt": "2024-04-07T17:03:53.000Z",
+    "updatedAt": "2024-04-07T17:15:00.000Z",
+    "contact": {
+      "id": "dM9PPRY0lW3c",
+      "reference": "400",
+      "firstName": "Miriam",
+      "lastName": "Ringo",
+      "phone": "255789876687",
+      "createdAt": "2024-04-07T17:03:44.000Z",
+      "updatedAt": "2024-04-07T17:03:44.000Z"
+    },
+    "campaign": {
+      "id": "a3rDge3wLSTh",
+      "name": "Ujenzi wa Kanisa - Mbwiji",
+      "startDate": "2023-12-08T21:00:00.000Z",
+      "endDate": "2024-12-07T21:00:00.000Z",
+      "description": "Ujenzi wa kanisa Mbwiji Mtoni",
+      "createdAt": "2024-04-06T12:52:04.000Z",
+      "updatedAt": "2024-04-06T12:54:54.000Z"
+    }
+  }
+  ```
+  - `id`: Unique identifier for the updated pledge.
+  - `number`: Unique identifier for the pledge (e.g., invoice number).
+  - `contactId`: The ID of the contact associated with the pledge.
+  - `campaignId`: The ID of the campaign associated with the pledge.
+  - `amount`: Updated amount of the pledge.
+  - `notes`: Updated additional notes or comments for the pledge.
+  - `createdAt`: Timestamp indicating when the pledge was created.
+  - `updatedAt`: Timestamp indicating when the pledge was last updated.
+  - `contact`: Details of the associated contact.
+  - `campaign`: Details of the associated campaign.
+
+#### Notes
+- At least one field should be specified in the request body.
+- The `notes` field is nullable.
+
+### Retrieve Pledge Details
+Retrieves details of a pledge by the specified ID.
+
+#### Request
+- **Method:** GET
+- **Endpoint:** `/pledge/:id` (where `:id` is the unique identifier of the pledge)
+
+#### Response
+- **Status Code:** 200 OK
+- **Body:**
+  ```json
+  {
+    "id": "CArMUpzZjbeW",
+    "number": "1712509433074",
+    "contactId": "dM9PPRY0lW3c",
+    "campaignId": "a3rDge3wLSTh",
+    "amount": 145000,
+    "notes": "Some comments",
+    "createdAt": "2024-04-07T17:03:53.000Z",
+    "updatedAt": "2024-04-07T17:15:00.000Z",
+    "contact": {
+      "id": "dM9PPRY0lW3c",
+      "reference": "400",
+      "firstName": "Miriam",
+      "lastName": "Ringo",
+      "phone": "255789876687",
+      "createdAt": "2024-04-07T17:03:44.000Z",
+      "updatedAt": "2024-04-07T17:03:44.000Z"
+    },
+    "campaign": {
+      "id": "a3rDge3wLSTh",
+      "name": "Ujenzi wa Kanisa - Mbwiji",
+      "startDate": "2023-12-08T21:00:00.000Z",
+      "endDate": "2024-12-07T21:00:00.000Z",
+      "description": "Ujenzi wa kanisa Mbwiji Mtoni",
+      "createdAt": "2024-04-06T12:52:04.000Z",
+      "updatedAt": "2024-04-06T12:54:54.000Z"
+    }
+  }
+  ```
+  - `id`: Unique identifier for the pledge.
+  - `number`: Unique identifier for the pledge (e.g., invoice number).
+  - `contactId`: The ID of the contact associated with the pledge.
+  - `campaignId`: The ID of the campaign associated with the pledge.
+  - `amount`: The amount of the pledge.
+  - `notes`: Additional notes or comments for the pledge.
+  - `createdAt`: Timestamp indicating when the pledge was created.
+  - `updatedAt`: Timestamp indicating when the pledge was last updated.
+  - `contact`: Details of the associated contact.
+  - `campaign`: Details of the associated campaign.
+
+#### Notes
+- This endpoint retrieves details of a pledge by the specified ID.
+- The response format is the same as in the create endpoint.
+
+### List All Pledges
+Retrieves a list of all pledges.
+
+#### Request
+- **Method:** GET
+- **Endpoint:** `/pledge`
+
+#### Response
+- **Status Code:** 200 OK
+- **Body:**
+  ```json
+  [
+    {
+      "id": "CArMUpzZjbeW",
+      "number": "1712509433074",
+      "contactId": "dM9PPRY0lW3c",
+      "campaignId": "a3rDge3wLSTh",
+      "amount": 145000,
+      "notes": "Some comments",
+      "createdAt": "2024-04-07T17:03:53.000Z",
+      "updatedAt": "2024-04-07T17:15:00.000Z",
+      "contact": {
+        "id": "dM9PPRY0lW3c",
+        "reference": "400",
+        "firstName": "Miriam",
+        "lastName": "Ringo",
+        "phone": "255789876687",
+        "createdAt": "2024-04-07T17:03:44.000Z",
+        "updatedAt": "2024-04-07T17:03:44.000Z"
+      },
+      "campaign": {
+        "id": "a3rDge3wLSTh",
+        "name": "Ujenzi wa Kanisa - Mbwiji",
+        "startDate": "2023-12-08T21:00:00.000Z",
+        "endDate": "2024-12-07T21:00:00.000Z",
+        "description": "Ujenzi wa kanisa Mbwiji Mtoni",
+        "createdAt": "2024-04-06T12:52:04.000Z",
+        "updatedAt": "2024-04-06T12:54:54.000Z"
+      }
+    },
+    ...
+  ]
+  ```
+  - `id`: Unique identifier for the pledge.
+  - `number`: Unique identifier for the pledge (e.g., invoice number).
+  - `contactId`: The ID of the contact associated with the pledge.
+  - `campaignId`: The ID of the campaign associated with the pledge.
+  - `amount`: The amount of the pledge.
+  - `notes`: Additional notes or comments for the pledge.
+  - `createdAt`: Timestamp indicating when the pledge was created.
+  - `updatedAt`: Timestamp indicating when the pledge was last updated.
+  - `contact`: Details of the associated contact.
+  - `campaign`: Details of the associated campaign.
+
+#### Notes
+- This endpoint returns an array of pledge objects.
+- It lists all pledges stored in the system.
