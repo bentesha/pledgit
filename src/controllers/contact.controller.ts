@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ValidationException } from 'src/exceptions/validation.exception';
 import {
   ContactService,
   CreateContactInfo,
@@ -40,6 +41,29 @@ export class ContactController {
       lastName: input.lastName,
       phone: input.phone,
     };
+
+    // Phone number must be unique
+    const phoneExists = await this.contactService.findOne({
+      phone: info.phone,
+    });
+    if (phoneExists) {
+      throw new ValidationException({
+        phone: 'Another contact with this phone exists',
+      });
+    }
+
+    if (info.reference) {
+      // Reference must be unique
+      const referenceExists = await this.contactService.findOne({
+        reference: info.reference,
+      });
+      if (referenceExists) {
+        throw new ValidationException({
+          reference: 'Another contact with this reference exists',
+        });
+      }
+    }
+
     const contact = await this.contactService.create(info, requestId);
     return contact;
   }
@@ -61,6 +85,31 @@ export class ContactController {
       lastName: input.lastName,
       phone: input.phone,
     };
+
+    if (info.phone) {
+      // Phone number must be unique
+      const contact = await this.contactService.findOne({
+        phone: info.phone,
+      });
+      if (contact && contact.id !== id) {
+        throw new ValidationException({
+          phone: 'Another contact with this phone exists',
+        });
+      }
+    }
+
+    if (info.reference) {
+      // Reference must be unique
+      const contact = await this.contactService.findOne({
+        reference: info.reference,
+      });
+      if (contact && contact.id !== id) {
+        throw new ValidationException({
+          reference: 'Another contact with this reference exists',
+        });
+      }
+    }
+
     const contact = await this.contactService.update(id, info, requestId);
     return contact;
   }

@@ -17,6 +17,11 @@ export interface UpdateContactInfo {
   phone?: string;
 }
 
+export interface FindContactInfo {
+  phone?: string;
+  reference?: string;
+}
+
 @Injectable()
 export class ContactService {
   constructor(
@@ -26,6 +31,10 @@ export class ContactService {
 
   async findById(id: string): Promise<Contact> {
     return Contact.query().findById(id);
+  }
+
+  async findOne(info: FindContactInfo): Promise<Contact> {
+    return Contact.query().findOne(info);
   }
 
   async findAll(): Promise<Array<Contact>> {
