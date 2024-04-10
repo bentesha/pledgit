@@ -3,6 +3,7 @@ import { CryptoHelper, DateHelper } from '@temboplus/common/dist/helpers';
 import { Payment } from 'src/models/payment.model';
 import { PaymentRow } from 'src/rows/payment.row';
 import { PledgeService } from './pledge.service';
+import { findQuery } from 'objection-find';
 
 export interface CreatePaymentInfo {
   pledgeId: string;
@@ -43,8 +44,12 @@ export class PaymentService {
     return Payment.query().findOne(info);
   }
 
-  async findAll(): Promise<Array<Payment>> {
-    return Payment.query().withGraphFetched('[contact, pledge, campaign]');
+  async findAll(query: any): Promise<Array<Payment>> {
+    return findQuery(Payment)
+      .allowAll(true)
+      .allowEager('[contact, pledge, campaign]')
+      .build(query);
+    // return Payment.query().withGraphFetched('[contact, pledge, campaign]');
   }
 
   async create(info: CreatePaymentInfo, requestId: string): Promise<Payment> {

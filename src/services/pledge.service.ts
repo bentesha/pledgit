@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CryptoHelper, DateHelper } from '@temboplus/common/dist/helpers';
 import { Pledge } from 'src/models/pledge.model';
 import { PledgeRow } from 'src/rows/pledge.row';
+import { findQuery } from 'objection-find';
 
 export interface CreatePledgeInfo {
   contactId: string;
@@ -38,8 +39,11 @@ export class PledgeService {
     return Pledge.query().findOne(info);
   }
 
-  async findAll(): Promise<Array<Pledge>> {
-    return Pledge.query().withGraphFetched('[contact, campaign]');
+  async findAll(query: any): Promise<Array<Pledge>> {
+    return findQuery(Pledge)
+      .allowAll(true)
+      .allowEager('[contact, campaign]')
+      .build(query);
   }
 
   async create(info: CreatePledgeInfo, requestId): Promise<Pledge> {

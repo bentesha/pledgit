@@ -8,10 +8,11 @@ import { PledgeService } from './services/pledge.service';
 import { PledgeController } from './controllers/pledge.controller';
 import { PaymentService } from './services/payment.service';
 import { PaymentController } from './controllers/payment.controller';
+import { QueryHelper } from './helpers/query.helper';
 
 @Module({
   imports: [CommonModule.config({})],
   controllers: [ContactController, CampaignController, PledgeController, PaymentController],
-  providers: [ContactService, CampaignService, PledgeService, PaymentService],
+  providers: [ContactService, CampaignService, PledgeService, PaymentService, QueryHelper],
 })
 export class AppModule {}

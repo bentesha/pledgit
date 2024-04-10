@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DateHelper, CryptoHelper } from '@temboplus/common/dist/helpers';
 import { Contact } from 'src/models/contact.model';
 import { ContactRow } from 'src/rows/contact.row';
+import { findQuery } from 'objection-find';
 
 export interface CreateContactInfo {
   reference: string | null;
@@ -37,8 +38,8 @@ export class ContactService {
     return Contact.query().findOne(info);
   }
 
-  async findAll(): Promise<Array<Contact>> {
-    return Contact.query();
+  async findAll(query: any): Promise<Array<Contact>> {
+    return findQuery(Contact).allowAll(true).allowEager('[]').build(query);
   }
 
   async create(info: CreateContactInfo, requestId: string): Promise<Contact> {

@@ -6,7 +6,9 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
+import { QueryHelper } from 'src/helpers/query.helper';
 import {
   CampaignService,
   CreateCampaignInfo,
@@ -19,11 +21,15 @@ import {
 
 @Controller('campaign')
 export class CampaignController {
-  constructor(private readonly campaignService: CampaignService) {}
+  constructor(
+    private readonly campaignService: CampaignService,
+    private readonly queryHelper: QueryHelper,
+  ) {}
 
   @Get()
-  async findAll() {
-    return this.campaignService.findAll();
+  async findAll(@Query() query: any) {
+    query = this.queryHelper.setDefaults(query);
+    return this.campaignService.findAll(query);
   }
 
   @Get('/:id')

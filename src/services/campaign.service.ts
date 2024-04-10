@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CryptoHelper, DateHelper } from '@temboplus/common/dist/helpers';
 import { Campaign } from 'src/models/campaign.model';
 import { CampaignRow } from 'src/rows/campaign.row';
+import { findQuery } from 'objection-find';
 
 export interface CreateCampaignInfo {
   name: string;
@@ -28,8 +29,8 @@ export class CampaignService {
     return Campaign.query().findById(id);
   }
 
-  async findAll(): Promise<Array<Campaign>> {
-    return Campaign.query();
+  async findAll(query: any): Promise<Array<Campaign>> {
+    return findQuery(Campaign).allowAll(true).allowEager('').build(query);
   }
 
   async create(info: CreateCampaignInfo, requestId): Promise<Campaign> {

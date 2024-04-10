@@ -7,14 +7,16 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ValidationException } from 'src/exceptions/validation.exception';
+import { QueryHelper } from 'src/helpers/query.helper';
 import {
   CreatePaymentInfo,
   PaymentService,
   UpdatePaymentInfo,
 } from 'src/services/payment.service';
-import { PledgeService, UpdatePledgeInfo } from 'src/services/pledge.service';
+import { PledgeService } from 'src/services/pledge.service';
 import {
   CreatePaymentValidator,
   UpdatePaymentValidator,
@@ -25,11 +27,13 @@ export class PaymentController {
   constructor(
     private readonly paymentService: PaymentService,
     private readonly pledgeService: PledgeService,
+    private readonly queryHelper: QueryHelper,
   ) {}
 
   @Get()
-  async findAll() {
-    return this.paymentService.findAll();
+  async findAll(@Query() query: any) {
+    query = this.queryHelper.setDefaults(query)
+    return this.paymentService.findAll(query);
   }
 
   @Get('/:id')

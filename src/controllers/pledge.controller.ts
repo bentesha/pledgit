@@ -7,8 +7,10 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ValidationException } from 'src/exceptions/validation.exception';
+import { QueryHelper } from 'src/helpers/query.helper';
 import { CampaignService } from 'src/services/campaign.service';
 import { ContactService } from 'src/services/contact.service';
 import {
@@ -27,6 +29,7 @@ export class PledgeController {
     private readonly pledgeService: PledgeService,
     private readonly contactService: ContactService,
     private readonly campaignService: CampaignService,
+    private readonly queryHelper: QueryHelper,
   ) {}
 
   @Get('/:id')
@@ -39,8 +42,9 @@ export class PledgeController {
   }
 
   @Get()
-  async findAll() {
-    return this.pledgeService.findAll();
+  async findAll(@Query() query: any) {
+    query = this.queryHelper.setDefaults(query);
+    return this.pledgeService.findAll(query);
   }
 
   @Post()

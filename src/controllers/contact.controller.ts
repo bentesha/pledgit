@@ -6,8 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ValidationException } from 'src/exceptions/validation.exception';
+import { QueryHelper } from 'src/helpers/query.helper';
 import {
   ContactService,
   CreateContactInfo,
@@ -20,7 +22,10 @@ import {
 
 @Controller('contact')
 export class ContactController {
-  constructor(private readonly contactService: ContactService) {}
+  constructor(
+    private readonly contactService: ContactService,
+    private readonly queryHelper: QueryHelper,
+  ) {}
 
   @Get('/:id')
   async findById(@Param('id') id: string) {
@@ -28,8 +33,9 @@ export class ContactController {
   }
 
   @Get()
-  async findAll() {
-    return this.contactService.findAll();
+  async findAll(@Query() query: any) {
+    this.queryHelper.setDefaults(query);
+    return this.contactService.findAll(query);
   }
 
   @Post()
