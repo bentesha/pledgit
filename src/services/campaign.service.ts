@@ -3,6 +3,9 @@ import { CryptoHelper, DateHelper } from '@temboplus/common/dist/helpers';
 import { Campaign } from 'src/models/campaign.model';
 import { CampaignRow } from 'src/rows/campaign.row';
 import { findQuery } from 'objection-find';
+import { DbHelper } from 'src/helpers/db.helper';
+import { Pledge } from 'src/models/pledge.model';
+import { Payment } from 'src/models/payment.model';
 
 export interface CreateCampaignInfo {
   name: string;
@@ -21,6 +24,7 @@ export interface UpdateCampaignInfo {
 @Injectable()
 export class CampaignService {
   constructor(
+    private readonly dbHelper: DbHelper,
     private readonly dateHelper: DateHelper,
     private readonly cryptoHelper: CryptoHelper,
   ) {}
@@ -61,5 +65,22 @@ export class CampaignService {
     };
     await Campaign.query().where({ id }).update(updates);
     return this.findById(id);
+  }
+
+  async updateTotals(id: string) {
+    // Calculate total pledges
+    const pledgedAmount = await this.dbHelper.getTotal(
+      Pledge.query().where({ campaignId: id }),
+      'amount',
+    );
+    // Calculate total payments
+    const paidAmount = await this.dbHelper.getTotal(
+      Payment.query().where({ campaignId: id }),
+      'amount',
+    );
+    await Campaign.query().where({ id }).update({
+      pledgedAmount,
+      paidAmount,
+    });
   }
 }

@@ -98,15 +98,15 @@ export class PledgeController {
       notes: input.notes,
     };
 
-    if (info.campaignId) {
-      // If campaign is being udpate, verify that campaingId is valid
-      const campaign = await this.campaignService.findById(info.campaignId);
-      if (!campaign) {
-        throw new ValidationException({
-          campaignId: `Campaign with id '${info.campaignId}' does not exist`,
-        });
-      }
-    }
+    // if (info.campaignId) {
+    //   // If campaign is being udpate, verify that campaingId is valid
+    //   const campaign = await this.campaignService.findById(info.campaignId);
+    //   if (!campaign) {
+    //     throw new ValidationException({
+    //       campaignId: `Campaign with id '${info.campaignId}' does not exist`,
+    //     });
+    //   }
+    // }
 
     const pledge = await this.pledgeService.update(id, info, requestId);
     return pledge;

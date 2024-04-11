@@ -9,6 +9,8 @@ export class Pledge extends Model implements PledgeRow {
   contactId: string;
   campaignId: string;
   amount: number;
+  paidAmount?: number;
+  unpaidAmount?: number;
   notes: string | string;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -39,6 +41,8 @@ export class Pledge extends Model implements PledgeRow {
     json = super.$parseDatabaseJson(json);
     if (json.amount !== undefined) {
       json.amount = Number(json.amount);
+      json.paidAmount = Number(json.paidAmount);
+      json.unpaidAmount = Number(json.unpaidAmount);
     }
     return json;
   }

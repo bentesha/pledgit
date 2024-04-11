@@ -4,6 +4,7 @@ import { Payment } from 'src/models/payment.model';
 import { PaymentRow } from 'src/rows/payment.row';
 import { PledgeService } from './pledge.service';
 import { findQuery } from 'objection-find';
+import { CampaignService } from './campaign.service';
 
 export interface CreatePaymentInfo {
   pledgeId: string;
@@ -29,6 +30,8 @@ export interface FindPaymentInfo {
 @Injectable()
 export class PaymentService {
   constructor(
+    private readonly pledgeService: PledgeService,
+    private readonly campaignService: CampaignService,
     private readonly dateHelper: DateHelper,
     private readonly peldgeService: PledgeService,
     private readonly cryptoHelper: CryptoHelper,
@@ -49,7 +52,6 @@ export class PaymentService {
       .allowAll(true)
       .allowEager('[contact, pledge, campaign]')
       .build(query);
-    // return Payment.query().withGraphFetched('[contact, pledge, campaign]');
   }
 
   async create(info: CreatePaymentInfo, requestId: string): Promise<Payment> {
@@ -68,6 +70,8 @@ export class PaymentService {
       updatedAt: this.dateHelper.formatCurrentTime(),
     };
     await Payment.query().insert(row);
+    // Calculate pledge totals
+    await this.pledgeService.updateTotals(info.pledgeId);
     return this.findById(row.id);
   }
 
@@ -76,6 +80,10 @@ export class PaymentService {
     info: UpdatePaymentInfo,
     requestId: string,
   ): Promise<Payment> {
+    const payment = await this.findById(id);
+    if (!payment) {
+      return undefined;
+    }
     const updates: Partial<PaymentRow> = {
       date: info.date,
       amount: info.amount,
@@ -84,12 +92,21 @@ export class PaymentService {
       notes: info.notes,
     };
     await Payment.query().where({ id }).update(updates);
+    // Update pledge & campaign totals
+    await this.pledgeService.updateTotals(payment.pledgeId);
+    await this.campaignService.updateTotals(payment.campaignId);
     return this.findById(id);
   }
 
   async delete(id: string, requestId: string): Promise<Payment> {
     const payment = await this.findById(id);
+    if (!payment) {
+      return undefined;
+    }
     await Payment.query().deleteById(id);
+    // Update pledge & campaign totals
+    await this.pledgeService.updateTotals(payment.pledgeId);
+    await this.campaignService.updateTotals(payment.campaignId);
     return payment;
   }
 }
