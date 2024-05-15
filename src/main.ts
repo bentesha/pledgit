@@ -3,9 +3,11 @@ import { AppModule } from './app.module';
 import * as Knex from 'knex';
 import { Model } from 'objection';
 import { config } from 'dotenv'
+import * as cors from 'cors'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(cors())
 
   config()
 
